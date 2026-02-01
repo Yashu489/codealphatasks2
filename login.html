@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mini Social Media</title>
+
+<style>
+/* ===== RESET ===== */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:#fafafa}
+
+/* ===== AUTH ===== */
+.auth{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(45deg,#833ab4,#fd1d1d,#fcb045)
+}
+.auth-box{
+background:#fff;
+padding:30px;
+width:320px;
+border-radius:12px;
+text-align:center;
+box-shadow:0 15px 30px rgba(0,0,0,.3)
+}
+.auth-box h2{margin-bottom:20px}
+.auth-box input{
+width:100%;
+padding:10px;
+margin:8px 0;
+border:1px solid #ccc;
+border-radius:6px
+}
+.auth-box button{
+width:100%;
+padding:10px;
+border:none;
+border-radius:20px;
+background:#fd1d1d;
+color:#fff;
+font-size:16px;
+cursor:pointer
+}
+.auth-box p{margin-top:15px}
+.auth-box a{color:#385185;cursor:pointer;font-weight:600}
+
+/* ===== NAVBAR ===== */
+.navbar{
+background:#fff;
+padding:14px;
+font-size:22px;
+font-weight:700;
+text-align:center;
+border-bottom:1px solid #ddd;
+position:sticky;
+top:0
+}
+
+/* ===== STORIES ===== */
+.stories{
+display:flex;
+overflow-x:auto;
+padding:10px;
+background:#fff;
+border-bottom:1px solid #ddd
+}
+.story{
+margin-right:10px;
+text-align:center;
+font-size:12px
+}
+.story img{
+width:55px;
+height:55px;
+border-radius:50%;
+border:3px solid #fd1d1d
+}
+
+/* ===== FEED ===== */
+.feed{max-width:420px;margin:20px auto}
+
+/* ===== CREATE POST ===== */
+.create-post{
+background:#fff;
+padding:15px;
+border-radius:10px;
+margin-bottom:20px
+}
+.create-post textarea,
+.create-post input{
+width:100%;
+padding:8px;
+margin-bottom:8px;
+border:1px solid #ccc;
+border-radius:6px
+}
+.create-post button{
+width:100%;
+padding:8px;
+background:#833ab4;
+color:#fff;
+border:none;
+border-radius:20px;
+cursor:pointer
+}
+
+/* ===== POST ===== */
+.post{
+background:#fff;
+border:1px solid #ddd;
+border-radius:8px;
+margin-bottom:20px;
+overflow:hidden
+}
+.post-header{
+display:flex;
+align-items:center;
+padding:10px
+}
+.post-header img{
+width:38px;
+height:38px;
+border-radius:50%;
+margin-right:10px
+}
+.follow-btn{
+margin-left:auto;
+background:#0095f6;
+border:none;
+color:#fff;
+padding:5px 10px;
+border-radius:6px;
+cursor:pointer
+}
+.post img{width:100%}
+.actions{
+padding:10px;
+font-size:22px;
+display:flex;
+gap:15px;
+cursor:pointer
+}
+.caption{
+padding:0 10px 10px;
+font-size:14px
+}
+.comments{
+padding:0 10px 10px;
+font-size:13px;
+color:#555
+}
+.comment-input{
+border-top:1px solid #eee;
+padding:8px
+}
+.comment-input input{
+width:100%;
+border:none;
+outline:none
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="auth" id="login">
+<div class="auth-box">
+<h2>MiniSocial</h2>
+<input placeholder="Username">
+<input type="password" placeholder="Password">
+<button onclick="openFeed()">Login</button>
+<p>Don't have account? <a onclick="showSignup()">Sign up</a></p>
+</div>
+</div>
+
+<!-- SIGNUP -->
+<div class="auth" id="signup" style="display:none">
+<div class="auth-box">
+<h2>Create Account</h2>
+<input placeholder="Username">
+<input placeholder="Email">
+<input type="password" placeholder="Password">
+<button onclick="showLogin()">Sign Up</button>
+</div>
+</div>
+
+<!-- FEED -->
+<div id="feedPage" style="display:none">
+
+<div class="navbar">MiniSocial</div>
+
+<div class="stories">
+<div class="story"><img src="https://i.pravatar.cc/60"><p>You</p></div>
+<div class="story"><img src="https://i.pravatar.cc/61"><p>user1</p></div>
+<div class="story"><img src="https://i.pravatar.cc/62"><p>user2</p></div>
+</div>
+
+<div class="feed">
+
+<div class="create-post">
+<textarea id="postText" placeholder="What's on your mind?"></textarea>
+<input id="postImg" placeholder="Image URL (optional)">
+<button onclick="addPost()">Post</button>
+</div>
+
+<div id="posts"></div>
+
+</div>
+</div>
+
+<script>
+function showSignup(){
+login.style.display="none";
+signup.style.display="flex";
+}
+function showLogin(){
+signup.style.display="none";
+login.style.display="flex";
+}
+function openFeed(){
+login.style.display="none";
+feedPage.style.display="block";
+}
+function addPost(){
+let text=postText.value;
+let img=postImg.value;
+if(!text)return alert("Write something!");
+posts.innerHTML=`
+<div class="post">
+<div class="post-header">
+<img src="https://i.pravatar.cc/40">
+<b>username</b>
+<button class="follow-btn" onclick="this.innerText='Following'">Follow</button>
+</div>
+${img?`<img src="${img}">`:``}
+<div class="actions">
+<span onclick="this.innerText='❤️ 1'">🤍</span>
+<span>💬</span>
+<span>🔁</span>
+<span>⭐</span>
+</div>
+<div class="caption"><b>username</b> ${text}</div>
+<div class="comments"></div>
+<div class="comment-input">
+<input placeholder="Add a comment..." onkeypress="if(event.key=='Enter'){this.parentElement.previousElementSibling.innerHTML+='<div>'+this.value+'</div>';this.value=''}">
+</div>
+</div>` + posts.innerHTML;
+postText.value="";
+postImg.value="";
+}
+</script>
+
+</body>
+</html>
